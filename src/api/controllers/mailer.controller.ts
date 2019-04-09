@@ -1,17 +1,21 @@
 import { Request, Response } from 'express';
-import * as nodemailer from 'nodemailer';
+import {
+  generateRandomCode,
+  sendEmailForVerification,
+  sendEmailHelperFunction
+} from '../helpers/mailer.helper';
 export class MailController {
-  public static async sendMail(req: Request, res: Response) {
+  public async sendEMail(req: Request, res: Response) {
 	const body = req.body;
-	console.log(body);
-	if (req.body === null || req.body === undefined || req.body === {}) {
+	console.log(Object.keys(body));
+	if (Object.keys(body).length === 0) {
 		res
 		.json({
 			message: 'Bad Request!'
 		})
 		.status(400);
 	} else {
-		this.sendEmail(
+		sendEmailHelperFunction(
 		body.senderEmail,
 		body.senderName,
 		body.receiverEmail,
@@ -28,37 +32,31 @@ export class MailController {
 		});
 	}
   }
-
-  private static async sendEmail(
-	senderEmail: string,
-	senderName: string,
-	receiverEmail: string,
-	subject: string,
-	body: string
-  ): Promise<void> {
-	const testAccount = await nodemailer.createTestAccount();
-
-	// create reusable transporter object using the default SMTP transport
-	const transporter = nodemailer.createTransport({
-		host: 'smtp.ethereal.email',
-		port: 587,
-		secure: false, // true for 465, false for other ports
-		auth: {
-		user: testAccount.user, // generated ethereal user
-		pass: testAccount.pass // generated ethereal password
-		}
-	});
-
-	// send mail with defined transport object
-	const info = await transporter.sendMail({
-		from: `"${senderName}" <${senderEmail}>`,
-		to: receiverEmail,
-		subject,
-		text: body,
-		html: '<b>Hello world?</b>'
-	});
-
-	console.log('Message sent: %s', info.messageId);
-	console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  public async sendEMailOTP(req: Request, res: Response) {
+	const body = req.body;
+	console.log(Object.keys(body));
+	if (Object.keys(body).length === 0) {
+		res
+		.json({
+			message: 'Bad Request!'
+		})
+		.status(400);
+	} else {
+		const OTP = generateRandomCode(5);
+		sendEmailForVerification(
+		body.senderEmail,
+		body.senderName,
+		body.receiverEmail,
+		OTP
+		)
+		.then((data: any) => {
+			res.status(200).json({
+			OTP
+			});
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+	}
   }
 }
