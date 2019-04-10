@@ -1,6 +1,4 @@
 # General settings
-dist: trusty
-sudo: false
 language: node_js
 node_js:
   - "lts/*"
@@ -11,7 +9,7 @@ notifications:
 branches:
   only:
     - master
-    - develop
+    - development
 
 # Build stages
 stages:
