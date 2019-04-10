@@ -1,4 +1,4 @@
-import NodeCache from 'node-cache';
+import NodeCache from "node-cache";
 const OTPCache = new NodeCache({ stdTTL: 6000, checkperiod: 120 });
 
 export function saveToCache(key: string, value: string): boolean {

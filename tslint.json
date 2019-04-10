@@ -8,10 +8,9 @@
         "trailing-comma": [false],
         "interface-name": [false],
         "no-console": [false],
-        "quotemark": [true],
         "object-literal-sort-keys": [false],
         "max-line-length": [true, 180],
-        "arrow-parens": false
+        "arrow-parens": [true]
     },
     "rulesDirectory": []
 }

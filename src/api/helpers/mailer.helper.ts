@@ -1,4 +1,4 @@
-import * as nodemailer from 'nodemailer';
+import * as nodemailer from "nodemailer";
 
 /*-------------------------------------------------------------
 Description: Send Email Function which sends out the email with
@@ -19,15 +19,15 @@ export async function sendEmailHelperFunction(
   const transporter = createEmailTransport(testAccount.user, testAccount.pass);
   // send mail with defined transport object
   const info = await transporter.sendMail({
-	from: `"${senderName}" <${senderEmail}>`,
-	to: receiverEmail,
-	subject,
-	text: body,
-	html: '<b>Hello world?</b>'
+    from: `"${senderName}" <${senderEmail}>`,
+    to: receiverEmail,
+    subject,
+    text: body,
+    html: "<b>Hello world?</b>"
   });
 
-  console.log('Message sent: %s', info);
-  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  console.log("Message sent: %s", info);
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 }
 
 /*-------------------------------------------------------------
@@ -46,15 +46,15 @@ export async function sendEmailOTPForVerification(
   const testAccount = await nodemailer.createTestAccount();
   const transporter = createEmailTransport(testAccount.user, testAccount.pass);
   const info = await transporter.sendMail({
-	from: `"${senderName}" <${senderEmail}>`,
-	to: receiverEmail,
-	subject: 'Here is your OTP',
-	text: `Your OTP is ${OTP}`,
-	html: '<b>Hello world?</b>'
+    from: `"${senderName}" <${senderEmail}>`,
+    to: receiverEmail,
+    subject: "Here is your OTP",
+    text: `Your OTP is ${OTP}`,
+    html: "<b>Hello world?</b>"
   });
 
-  console.log('Message sent: %s', info.messageId);
-  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  console.log("Message sent: %s", info.messageId);
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   // send mail with defined transport object
 }
 
@@ -64,12 +64,12 @@ Input: length as Number
 Output: String
 -------------------------------------------------------------*/
 export function generateRandomCode(length: number): string {
-  let text = '';
+  let text = "";
   const possible =
-	'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
   for (let i = 0; i < length; i++) {
-	text += possible.charAt(Math.floor(Math.random() * possible.length));
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
 
   return text;
@@ -86,14 +86,14 @@ export async function sendEmailLinkForVerification(
   const transporter = createEmailTransport(testAccount.user, testAccount.pass);
   const url = `http://${host}/verify?id=${randomHash}`;
   const info = await transporter.sendMail({
-	from: `"${senderName}" <${senderEmail}>`,
-	to: receiverEmail,
-	subject: 'Here is your OTP',
-	html: `<a href="${url}" target="_blank">Verify Now</a>`
+    from: `"${senderName}" <${senderEmail}>`,
+    to: receiverEmail,
+    subject: "Here is your OTP",
+    html: `<a href="${url}" target="_blank">Verify Now</a>`
   });
 
-  console.log('Message sent: %s', info.messageId);
-  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  console.log("Message sent: %s", info.messageId);
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   // send mail with defined transport object
 }
 
@@ -102,9 +102,9 @@ export async function verifyEmailLink(
   verifyHash: string
 ): Promise<boolean> {
   if (randomHash === verifyHash) {
-	return true;
+    return true;
   } else {
-	return false;
+    return false;
   }
 }
 
@@ -115,12 +115,12 @@ Output: Mail
 ---------------------------------------------------------------------*/
 function createEmailTransport(user: string, pass: string) {
   return nodemailer.createTransport({
-	host: 'smtp.ethereal.email',
-	port: 587,
-	secure: false, // true for 465, false for other ports
-	auth: {
-		user, // generated ethereal user
-		pass // generated ethereal password
-	}
+    host: "smtp.ethereal.email",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user, // generated ethereal user
+      pass // generated ethereal password
+    }
   });
 }
