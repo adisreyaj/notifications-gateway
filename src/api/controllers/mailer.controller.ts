@@ -31,19 +31,19 @@ export async function sendEMail(req: Request, res: Response): Promise<any> {
   } else {
     sendEmailHelperFunction(
       body.senderEmail,
-		body.senderName,
-		body.receiverEmail,
-		body.subject,
-		body.body
-	)
-		.then((data: any) => {
-		res.status(200).json({
-			message: data
-		});
-		})
-		.catch((err) => {
-		console.log(err);
-		});
+      body.senderName,
+      body.receiverEmail,
+      body.subject,
+      body.body
+    )
+      .then((data: any) => {
+        res.status(200).json({
+          message: data
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 }
 
@@ -58,31 +58,31 @@ Output: Promise
 export async function sendEMailOTP(req: Request, res: Response): Promise<any> {
   const body = req.body;
   if (Object.keys(body).length === 0) {
-	res
-		.json({
-		message: 'Bad Request!'
-		})
-		.status(400);
+    res
+      .json({
+        message: "Bad Request!"
+      })
+      .status(400);
   } else {
-	const OTP = generateRandomCode(5);
-	emailOTPHash = bcrypt.hashSync(OTP, 10);
-	saveToCache(body.receiverEmail, emailOTPHash);
-	sendEmailOTPForVerification(
-		body.senderEmail,
-		body.senderName,
-		body.receiverEmail,
-		OTP
-	)
-		.then((data: any) => {
-		res.status(200).json({
-			message: 'Email OTP sent successfully'
-		});
-		})
-		.catch((err) => {
-		res.status(500).json({
-			error: 'Failed to Sent OTP'
-		});
-		});
+    const OTP = generateRandomCode(5);
+    emailOTPHash = bcrypt.hashSync(OTP, 10);
+    saveToCache(body.receiverEmail, emailOTPHash);
+    sendEmailOTPForVerification(
+      body.senderEmail,
+      body.senderName,
+      body.receiverEmail,
+      OTP
+    )
+      .then((data: any) => {
+        res.status(200).json({
+          message: "Email OTP sent successfully"
+        });
+      })
+      .catch(err => {
+        res.status(500).json({
+          error: "Failed to Sent OTP"
+        });
+      });
   }
 }
 
@@ -100,64 +100,64 @@ export async function verifyEmailOTP(
   const OTP = req.query.id;
   const identifier = req.query.identifier;
   if (
-	(!OTP || OTP === (null || undefined)) &&
-	(!identifier || identifier === (null || undefined))
+    (!OTP || OTP === (null || undefined)) &&
+    (!identifier || identifier === (null || undefined))
   ) {
-	res.status(400).json({
-		error: 'Bad Request'
-	});
+    res.status(400).json({
+      error: "Bad Request"
+    });
   } else {
-	// Get the saved OTP Hash from the Cache
-	const OTPCache = getValueFromCache(identifier);
-	if (OTPCache) {
-		// Compare the OTP and the OTPHash which is store in the Cache
-		if (bcrypt.compareSync(OTP, getValueFromCache(identifier))) {
-		res.status(200).json({
-			message: 'Verified'
-		});
-		// Delete the Code from Cache once it is verified
-		deleteValueFromCache(identifier);
-		} else {
-		res.status(401).json({
-			error: 'Verification Failed'
-		});
-		// Delete the Code from Cache if verification failed
-		deleteValueFromCache(identifier);
-		}
-	} else {
-		res.status(404).json({
-		error: 'OTP Expired!Please generate new OTP'
-		});
-	}
+    // Get the saved OTP Hash from the Cache
+    const OTPCache = getValueFromCache(identifier);
+    if (OTPCache) {
+      // Compare the OTP and the OTPHash which is store in the Cache
+      if (bcrypt.compareSync(OTP, getValueFromCache(identifier))) {
+        res.status(200).json({
+          message: "Verified"
+        });
+        // Delete the Code from Cache once it is verified
+        deleteValueFromCache(identifier);
+      } else {
+        res.status(401).json({
+          error: "Verification Failed"
+        });
+        // Delete the Code from Cache if verification failed
+        deleteValueFromCache(identifier);
+      }
+    } else {
+      res.status(404).json({
+        error: "OTP Expired!Please generate new OTP"
+      });
+    }
   }
 }
 
 export async function sendEMailVerificationLink(req: Request, res: Response) {
   const body = req.body;
   if (Object.keys(body).length === 0) {
-	res
-		.json({
-		message: 'Bad Request!'
-		})
-		.status(400);
+    res
+      .json({
+        message: "Bad Request!"
+      })
+      .status(400);
   } else {
-	const OTP = generateRandomCode(10);
-	sendEmailLinkForVerification(
-		body.senderEmail,
-		body.senderName,
-		body.receiverEmail,
-		OTP,
-		req.get('host')
-	)
-		.then((data) => {
-		res.status(200).json({
-			message: 'Email Verification Link Sent'
-		});
-		})
-		.catch((err) => {
-		res.status(500).json({
-			error: err
-		});
-		});
+    const OTP = generateRandomCode(10);
+    sendEmailLinkForVerification(
+      body.senderEmail,
+      body.senderName,
+      body.receiverEmail,
+      OTP,
+      req.get("host")
+    )
+      .then(data => {
+        res.status(200).json({
+          message: "Email Verification Link Sent"
+        });
+      })
+      .catch(err => {
+        res.status(500).json({
+          error: err
+        });
+      });
   }
 }
