@@ -1,16 +1,18 @@
 {
     "defaultSeverity": "error",
     "extends": [
-        "tslint:recommended"
+        "tslint:recommended",
+        "tslint-no-unused-expression-chai"
     ],
     "jsRules": {},
     "rules": {
+        "indent": [true, "tabs", 2],
         "trailing-comma": [false],
         "interface-name": [false],
         "no-console": [false],
+        "quotemark": [true, "single"],
         "object-literal-sort-keys": [false],
-        "max-line-length": [true, 180],
-        "arrow-parens": [true]
+        "max-line-length": [true, 180]
     },
     "rulesDirectory": []
 }

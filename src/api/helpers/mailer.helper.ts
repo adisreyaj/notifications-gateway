@@ -75,16 +75,25 @@ export function generateRandomCode(length: number): string {
   return text;
 }
 
+/*-------------------------------------------------------------
+Description: Send a Verification Link via email to the receipient
+Input: senderEmail as String, senderName as String,
+        receiverEmail as String, randomHash as string,
+        redirectURI as String
+Output: Promise of void
+-------------------------------------------------------------*/
+
 export async function sendEmailLinkForVerification(
   senderEmail: string,
   senderName: string,
   receiverEmail: string,
   randomHash: string,
-  host: string
+  redirectURI: string
 ): Promise<void> {
   const testAccount = await nodemailer.createTestAccount();
   const transporter = createEmailTransport(testAccount.user, testAccount.pass);
-  const url = `http://${host}/verify?id=${randomHash}`;
+  // Construct the Verification Link
+  const url = `${redirectURI}/verify?id=${randomHash}`;
   const info = await transporter.sendMail({
     from: `"${senderName}" <${senderEmail}>`,
     to: receiverEmail,

@@ -8,7 +8,7 @@
     "start": "tsc && node ",
     "watch-node": "nodemon",
     "build": "tsc",
-    "watch-build": "npm run watch-ts && npm run watch-node",
+    "watch-build": "concurrently \"npm run watch-ts\" \"npm run watch-node\"",
     "test": "jest --detectOpenHandles --runInBand",
     "test:coverage": "jest --detectOpenHandles --runInBand --coverage"
   },
@@ -26,6 +26,7 @@
   "dependencies": {
     "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
     "express": "^4.16.4",
     "node-cache": "^4.2.0",
     "nodemailer": "^6.1.0"

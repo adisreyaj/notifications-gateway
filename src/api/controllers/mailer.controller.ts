@@ -111,7 +111,7 @@ export async function verifyEmailOTP(
     const OTPCache = getValueFromCache(identifier);
     if (OTPCache) {
       // Compare the OTP and the OTPHash which is store in the Cache
-      if (bcrypt.compareSync(OTP, getValueFromCache(identifier))) {
+      if (bcrypt.compareSync(OTP, OTPCache)) {
         res.status(200).json({
           message: "Verified"
         });
@@ -132,6 +132,12 @@ export async function verifyEmailOTP(
   }
 }
 
+/*-------------------------------------------------------------
+Description: Send a verification link to the user
+Input: req as Request and res as Response
+Output: Promise
+-------------------------------------------------------------*/
+
 export async function sendEMailVerificationLink(req: Request, res: Response) {
   const body = req.body;
   if (Object.keys(body).length === 0) {
@@ -141,15 +147,15 @@ export async function sendEMailVerificationLink(req: Request, res: Response) {
       })
       .status(400);
   } else {
-    const OTP = generateRandomCode(10);
+    const OTP = generateRandomCode(30);
     sendEmailLinkForVerification(
       body.senderEmail,
       body.senderName,
       body.receiverEmail,
       OTP,
-      req.get("host")
+      body.redirectURI
     )
-      .then(data => {
+      .then(() => {
         res.status(200).json({
           message: "Email Verification Link Sent"
         });
