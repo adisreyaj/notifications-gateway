@@ -24,7 +24,7 @@
   "publisher": "adisreyaj",
   "license": "MIT",
   "dependencies": {
-    "bcrypt": "^3.0.5",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "node-cache": "^4.2.0",
